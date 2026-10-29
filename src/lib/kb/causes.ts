@@ -52,16 +52,8 @@ export function uniqueById(reports: Report[]): Report[] {
   return [...new Map(reports.map((r) => [r.id, r])).values()];
 }
 
-// A one-day move is not a month flip: the date shifts by a day, or differs between people in different
-// time zones. The desk lists these by hand (desk-notes.json); split out, they get a cause of their own.
-export type SplitCause = Cause | 'shift';
-
-export function splitCauseOf(r: Pick<Report, 'id' | 'channel'>, t: Tenant | undefined, shifted: readonly string[]): SplitCause | null {
-  return shifted.includes(r.id) ? 'shift' : causeOf(r, t);
-}
-
 export type CauseGroup = {
-  cause: SplitCause | 'unplaced';
+  cause: Cause | 'unplaced';
   reports: Report[];
   // What intake tagged these reports as: tag → count.
   taggedAs: Record<string, number>;
@@ -71,15 +63,10 @@ export type CauseGroup = {
   mergedInto: number[];
 };
 
-// `classify` defaults to causeOf; pass splitCauseOf to count one-day moves on their own.
-export function groupByCause(
-  reports: Report[],
-  tenantOf: (r: Report) => Tenant | undefined,
-  classify: (r: Report, t: Tenant | undefined) => SplitCause | null = causeOf,
-): CauseGroup[] {
+export function groupByCause(reports: Report[], tenantOf: (r: Report) => Tenant | undefined): CauseGroup[] {
   const byCause = new Map<CauseGroup['cause'], Report[]>();
   for (const r of reports) {
-    const cause = classify(r, tenantOf(r)) ?? 'unplaced';
+    const cause = causeOf(r, tenantOf(r)) ?? 'unplaced';
     byCause.set(cause, [...(byCause.get(cause) ?? []), r]);
   }
   return [...byCause.entries()]

@@ -18,12 +18,20 @@ and marked known with one fix queued. Read by cause, not by subject, it holds th
 fix covers only the first.
 
 <Callout kind="warn">
-Not one issue. Closing #4471 when the parser fix ships leaves the other two open, with no ticket of their own.
+Not one issue. #4471 closed with two outcomes; the one-day move is still open, with no fix.
 </Callout>
 
 ## The split
 
 <SplitTable ticket={4471} repo="mateuszjarzyna/megadev" tickets={{ parser: 1, hint: 2, shift: 3 }} />
+
+## Outcome
+
+The desk closed #4471 on 5 October.
+
+- **`parser`: fixed** by `fix(dates): parse dd/mm for eu locales`. Ticket closed.
+- **`hint`: won't fix.** The booking-v3 form is retired. Ticket closed as not planned.
+- **`shift`: open.** Neither outcome touches time zones, so the one-day move is still a bug. Its ticket stays open.
 
 ## The three problems
 
@@ -34,7 +42,7 @@ Not one issue. Closing #4471 when the parser fix ships leaves the other two open
   the parser fix does not reach it.
 - **`shift`.** The date moves by one day, or differs between people in different places ("Lisbon got Tuesday,
   Toronto got Monday"). That is time-zone handling, not date order. The desk had already listed these reports as a
-  one-day move; the incident page filed them under `parser` by tenant.
+  one-day move and counts them under `parser` by tenant; so does the table above, with a footnote.
 
 ## How the reports were placed
 
@@ -45,7 +53,7 @@ Not one issue. Closing #4471 when the parser fix ships leaves the other two open
 
 ## What to change
 
-- Track each problem on its own ticket and close #4471 only when all three are fixed.
+- Track each problem on its own ticket. A ticket closes when its own problem is fixed, not when its parent closes.
 - Merge by cause, not by subject: in this ticket, one subject line covers reports from more than one cause.
 
 <RenderStamp {signature} />
