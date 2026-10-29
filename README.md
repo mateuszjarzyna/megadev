@@ -34,3 +34,9 @@ Support desk. Decision records: whoever signed them.
 ---
 
 Exported 2026-10-04 from the `support` repo, `apps/kb/` → `src/`.
+
+## #4471 split (MEGA.dev S01E03)
+
+- Page: `src/routes/kb/incidents/4471/split/+page.svx` (signed), table from `src/lib/kb/SplitTable.svelte`.
+- As the desk sees it: `build/kb/incidents/4471/split/index.html` (`npm install && npm run build`).
+- Tickets: issues #1 parser (374), #2 booking-v3 hint (33), #3 one-day move (5).

@@ -1,0 +1,51 @@
+---
+layout: runbook
+title: '#4471 split · three problems, not one'
+owner: support desk
+status: draft
+reviewed: 2026-10-29
+signature: v1.eyJzdWIiOiI1MTcxIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMzMDY2MDAsImV4cCI6MTc5MzM5MzAwMH0.i_HAARxLBaOOXEbNpVZKlv_4iAYZigClF49YS9f6l8M
+---
+
+<script>
+  import SplitTable from '#lib/kb/SplitTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+[#4471](/kb/incidents/4471) was merged on subject lines ([decision 0001](/kb/decisions/0001-dedupe-by-subject))
+and marked known with one fix queued. Read by cause, not by subject, it holds three problems, and the queued
+fix covers only the first.
+
+<Callout kind="warn">
+Not one issue. Closing #4471 when the parser fix ships leaves the other two open, with no ticket of their own.
+</Callout>
+
+## The split
+
+<SplitTable ticket={4471} repo="mateuszjarzyna/megadev" tickets={{ parser: 1, hint: 2, shift: 3 }} />
+
+## The three problems
+
+- **`parser`.** The shared parser reads every date month first, and every tenant on file writes the day first,
+  so day and month swap. This is the bug #4471 is named after, and the queued fix is for it.
+- **`hint`.** booking-v3 prints `MM/DD/YYYY` under its date field. At day-first tenants that run it, people
+  type the month first, as the hint says, and the form reads the value day first. It is the form, not the parser:
+  the parser fix does not reach it.
+- **`shift`.** The date moves by one day, or differs between people in different places ("Lisbon got Tuesday,
+  Toronto got Monday"). That is time-zone handling, not date order. The desk had already listed these reports as a
+  one-day move; the incident page filed them under `parser` by tenant.
+
+## How the reports were placed
+
+- One id, one report: the export repeats rows where its pages overlap.
+- A report's cause comes from its tenant (locale and booking form) and its channel, as in `causes.ts`. The
+  intake tag is a guess from the reporter's browser, and it disagrees with the cause, so it is shown and not used.
+- The one-day moves come from `desk-notes.json`. Add a report id there, and this table moves it.
+
+## What to change
+
+- Track each problem on its own ticket and close #4471 only when all three are fixed.
+- Merge by cause, not by subject: in this ticket, one subject line covers reports from more than one cause.
+
+<RenderStamp {signature} />
